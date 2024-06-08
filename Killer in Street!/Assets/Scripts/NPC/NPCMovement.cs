@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class NPCMovement : MonoBehaviour
 {
-    private enum NPCState{
+    public enum NPCState{
         Group,
         MoveLeft,
         MoveRight
@@ -10,9 +10,10 @@ public class NPCMovement : MonoBehaviour
 
     public Transform player;
 
-    [SerializeField]
-    private NPCState startState;
-    private NPCState currentState;
+    [HideInInspector]
+    public NPCState currentState;
+    [HideInInspector]
+    public int stateCode;
 
     private Rigidbody2D rb;
     private Collider2D coll;
@@ -27,6 +28,7 @@ public class NPCMovement : MonoBehaviour
     public float minDistance;
     [Space(10)]
 
+    [HideInInspector]
     public float speed;
     private bool checkWall = false;
 
@@ -36,12 +38,12 @@ public class NPCMovement : MonoBehaviour
         coll = GetComponent<Collider2D>();
 
         startTime = Time.time;
-        currentState = startState;
     }
 
     void Update()
     {
         ChangeColliderTrigger();
+        SetState();
 
         if(currentState == NPCState.MoveLeft) {
             MoveInDirection(Vector2.left);
@@ -52,7 +54,7 @@ public class NPCMovement : MonoBehaviour
 
         if(!checkWall){
 
-        #region Time Calculations
+            #region Time Calculations
             if(Time.time >= startTime + timeDuration){
                 // Change State (Move Left -> Move Right and vice versa)
                 ChangeDirectionThroughState();
@@ -63,9 +65,11 @@ public class NPCMovement : MonoBehaviour
                 // Reset Alarm
                 startTime = Time.time;
             }
-
-        #endregion
+            #endregion
         
+        }
+        else{
+            ChangeDirectionThroughState();
         }
     }
 
@@ -74,10 +78,17 @@ public class NPCMovement : MonoBehaviour
     }
 
     void ChangeDirectionThroughState(){
-        if(currentState == NPCState.MoveLeft) currentState = NPCState.MoveRight;
-        else if (currentState == NPCState.MoveRight) currentState = NPCState.MoveLeft;
+        if(stateCode == 1) stateCode = 2;
+        else stateCode = 1;
     }   
 
+    void SetState(){
+        if(stateCode == 0) currentState = NPCState.Group;
+        else if(stateCode == 1) currentState = NPCState.MoveLeft;
+        else if(stateCode == 2) currentState = NPCState.MoveRight;
+    }
+
+    // FIX BUG :: -> This occurs only during collision
     void OnCollisionEnter2D(Collision2D collision){
         if(collision.collider.tag == "Wall"){
             ChangeDirectionThroughState();

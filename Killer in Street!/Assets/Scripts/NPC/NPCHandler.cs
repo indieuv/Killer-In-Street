@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class NPCHandler : MonoBehaviour
 {
-    public List<NPCMovement> npcMovements;
+    public List<NPCController> npcControllers;
 
     void Start(){
-        // Set all the values of NPC Movements
-        foreach(NPCMovement npc in npcMovements){
+        foreach(NPCController npc in npcControllers){
+            npc.typeCode = Random.Range(1, 4);
 
-            // Not Starting the Range from 0 to avoid Stopping at The Beggining of the Game
-            npc.stateCode = Random.Range(1, 2);
+            // move in random direction just for now
+            npc.npc_direction = Random.Range(0, 1);
+            npc.speed = Random.Range(3f, 7f);
 
-            // Setting the Speed
-            npc.speed = Random.Range(1, 4);
+            npc.timeDuration = Random.Range(1f, 4f);
         }
     }
+
+    // TODO : Set Characters According to its Type
 }

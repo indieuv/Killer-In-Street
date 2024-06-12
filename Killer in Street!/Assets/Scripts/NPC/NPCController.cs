@@ -31,7 +31,7 @@ public class NPCController : MonoBehaviour
     public int npc_direction;// 0 -> left, 1 -> right
 
     [Space(10), Header("NPC Characters")]
-    public bool knowsHisSurrounding;
+    public bool knowsLocation;
     public bool groups;
     public bool chats;
     // public bool canUseCabs;
@@ -87,4 +87,8 @@ public class NPCController : MonoBehaviour
             coll.isTrigger = false;
         }
     }
+
+    //TODO : Creating fixed directions for those who know their location and replace with DEMO CODE
+    //TODO : Cabs Mechanism
+    //TODO : Grouping Mechanism and Chatting Mechanism
 }

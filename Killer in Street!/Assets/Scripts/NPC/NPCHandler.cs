@@ -14,8 +14,41 @@ public class NPCHandler : MonoBehaviour
             npc.speed = Random.Range(3f, 7f);
 
             npc.timeDuration = Random.Range(1f, 4f);
+
+            SetCharacter(npc);
         }
     }
 
     // TODO : Set Characters According to its Type
+    void SetCharacter(NPCController npc){
+        switch(npc.typeCode){
+            case 1 :
+                // Traveller
+                npc.knowsLocation = false;
+                npc.groups = false;
+                npc.chats = true;
+                break;
+            
+            case 2 :
+                // Missionary
+                npc.knowsLocation = true;
+                npc.groups = false;
+                npc.chats = true;
+                break;
+
+            case 3 :
+                // Group Chatter
+                npc.knowsLocation = true;
+                npc.groups = true;
+                npc.chats = true;
+                break;
+
+            case 4 :
+                // Shoppper
+                npc.knowsLocation = true;
+                npc.groups = (Random.Range(0, 2) == 0);
+                npc.chats = (Random.Range(0,2) == 0);
+                break;
+        }
+    }
 }
